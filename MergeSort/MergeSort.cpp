@@ -1,20 +1,63 @@
-// MergeSort.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <vector>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+void merge(std::vector<int>& arr, int left, int mid, int right) {
+    std::vector<int> leftArr(mid - left + 1);
+    std::vector<int> rightArr(right - mid);
+
+    for (int i = 0; i < leftArr.size(); i++) {
+        leftArr[i] = arr[left + i];
+    }
+    for (int i = 0; i < rightArr.size(); i++) {
+        rightArr[i] = arr[mid + 1 + i];
+    }
+
+    int i = 0, j = 0, k = left;
+    while (i < leftArr.size() && j < rightArr.size()) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        }
+        else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < leftArr.size()) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    while (j < rightArr.size()) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void mergeSort(std::vector<int>& arr, int left, int right) {
+    if (left >= right) {
+        return;
+    }
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+    int mid = (left + right) / 2;
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+    merge(arr, left, mid, right);
+}
+
+int main() {
+    std::vector<int> arr = { 5, 2, 8, 4, 1, 9, 3, 7, 6 };
+
+    mergeSort(arr, 0, arr.size() - 1);
+
+    for (int i = 0; i < arr.size(); i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
